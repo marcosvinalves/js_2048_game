@@ -45,7 +45,7 @@ button.addEventListener('click', () => {
     button.classList.remove('start');
     button.textContent = 'Restart';
     button.classList.add('restart');
-  } else if (game.getStatus() === 'playing') {
+  } else {
     game.restart();
     renderBoard();
     document.querySelector('.message.message-start').classList.remove('hidden');

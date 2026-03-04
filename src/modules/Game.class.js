@@ -14,27 +14,57 @@ class Game {
   }
 
   moveLeft() {
+    const boardBefore = JSON.stringify(this.board);
+
     this.board = this.board.map((row) => this.mergeRow(row));
-    this.addRandomTile();
+
+    if (boardBefore !== JSON.stringify(this.board)) {
+      this.addRandomTile();
+    }
+
+    this.checkStatus();
   }
 
   moveRight() {
+    const boardBefore = JSON.stringify(this.board);
+
     this.board = this.board.map((row) =>
-      this.mergeRow(row.reverse()).reverse(),);
-    this.addRandomTile();
+      this.mergeRow(row.reverse()).reverse(),
+    );
+
+    if (boardBefore !== JSON.stringify(this.board)) {
+      this.addRandomTile();
+    }
+
+    this.checkStatus();
   }
 
   moveUp() {
+    const boardBefore = JSON.stringify(this.board);
+
     this.board = this.transpose().map((row) => this.mergeRow(row));
     this.board = this.transpose();
-    this.addRandomTile();
+
+    if (boardBefore !== JSON.stringify(this.board)) {
+      this.addRandomTile();
+    }
+
+    this.checkStatus();
   }
 
   moveDown() {
+    const boardBefore = JSON.stringify(this.board);
+
     this.board = this.transpose().map((row) =>
-      this.mergeRow(row.reverse()).reverse(),);
+      this.mergeRow(row.reverse()).reverse(),
+    );
     this.board = this.transpose();
-    this.addRandomTile();
+
+    if (boardBefore !== JSON.stringify(this.board)) {
+      this.addRandomTile();
+    }
+
+    this.checkStatus();
   }
 
   getScore() {
@@ -75,6 +105,10 @@ class Game {
       }
     }
 
+    if (emptyCells.length === 0) {
+      return;
+    }
+
     const randomTile = Math.floor(Math.random() * emptyCells.length);
     const [randomRow, randomCol] = emptyCells[randomTile];
 
@@ -101,7 +135,8 @@ class Game {
 
   transpose() {
     return this.board[0].map((_, colIndex) =>
-      this.board.map((row) => row[colIndex]),);
+      this.board.map((row) => row[colIndex]),
+    );
   }
 
   hasNoMoves() {
@@ -128,6 +163,14 @@ class Game {
     }
 
     return true;
+  }
+
+  checkStatus() {
+    if (this.board.flat().some((cell) => cell === 2048)) {
+      this.status = 'win';
+    } else if (this.hasNoMoves()) {
+      this.status = 'lose';
+    }
   }
 }
 
